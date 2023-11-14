@@ -20,7 +20,7 @@ jobs:
 
       - name: Update action.yml
         run: |
-          sed -i "s/\(naivesystems\/googlecpp:\)[^']*/\1${{ github.event.inputs.version }}/g" ./googlecpp-action/action.yml;
+          sed -i 's/\(image: 'docker:\/\/ghcr.io\/naivesystems\/googlecpp-image:\).*'/\1${{ github.event.inputs.version }}/' ./googlecpp-action/action.yml;
           cat ./googlecpp-action/action.yml;
           cd ./googlecpp-action; git status
         shell: bash
