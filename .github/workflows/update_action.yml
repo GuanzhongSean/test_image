@@ -1,0 +1,32 @@
+name: Action Update
+
+on: 
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Release Version of Published Docker Image'
+        required: true
+
+jobs:
+  update-action:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with: 
+          repository: GuanzhongSean/test_action  # Shall be replaced by actual googlecpp-action repo
+          path: ./googlecpp-action
+          token: ${{ secrets.PAT }} # Shall be replaced by a real PAT
+
+      - name: Update action.yml
+        run: |
+          sed -i "s/\(naivesystems\/googlecpp:\)[^']*/\1${{ github.event.inputs.version }}/g" ./googlecpp-action/action.yml
+        shell: bash
+
+      - name: Push action changes
+        uses: EndBug/add-and-commit@v9
+        with:
+          cwd: ./googlecpp-action
+          author_name: GuanzhongSean                                              # Shall be replaced by feasible information
+          author_email: guanzhongsean@outlook.com                                 #
+          message: 'update image version to ${{ github.event.inputs.version }}'   #
